@@ -1,6 +1,6 @@
 # csv2parquet
 
-Convert a CSV to a parquet file.
+Convert a CSV to a parquet file. You may also find [sqlite-parquet-vtable](https://github.com/cldellow/sqlite-parquet-vtable) useful.
 
 ## Usage
 

@@ -15,7 +15,7 @@ Next, create some Parquet files. The tool supports CSV and TSV files.
 ./csv2parquet file.csv [--row-group-size NNN] [--output output.parquet] [--codec CODEC]
 ```
 
-where `CODEC` is one of `snappy`, `gzip` or `none`
+where `CODEC` is one of `snappy`, `gzip`, `brotili` or `none`
 
 ## csv2tsv
 

@@ -33,3 +33,8 @@ the header row at the top):
 ```
 
 Under the covers, this delegates to the Unix `sort` command. See `man sort` for other options you can pass.
+Note that sorting by multiple columns (say, the 8th, then the 4th) has an unintuitive syntax:
+
+```
+./csv2tsv file.csv -k8,8 -k4,4 > file.tsv
+```

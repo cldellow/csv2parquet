@@ -57,7 +57,7 @@ if __name__ == '__main__':
   parser.add_argument('csv_file', help="input file, can be CSV or TSV")
   parser.add_argument('-r', '--row-group-size', default=10000, type=int, help='The number of rows per row group.', nargs='?')
   parser.add_argument('-o', '--output', help='The parquet file', nargs='?')
-  parser.add_argument('-c', '--codec', default='snappy', help='The compression codec to use (gzip, snappy, none)', nargs='?')
+  parser.add_argument('-c', '--codec', default='snappy', help='The compression codec to use (brotli, gzip, snappy, none)', nargs='?')
   rv = parser.parse_args()
   output = rv.output
   if output is None:

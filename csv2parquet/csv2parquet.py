@@ -10,13 +10,18 @@ def get_delimiter(csv_file):
         return '\t'
     return ','
 
+def sanitize_column_name(name):
+    cleaned = re.sub('[^a-z0-9]', '_', name.lower())
+    cleaned = re.sub('__*', '_', cleaned)
+    return cleaned
+
 def get_column_names(csv_file):
     with open(csv_file) as csvfile:
         spamreader = csv.reader(csvfile, delimiter=get_delimiter(csv_file))
         column_names = []
         for row in spamreader:
             for col in row:
-                column_names.append(col)
+                column_names.append(sanitize_column_name(col))
             return column_names
 
 def convert(csv_file, output_file, row_group_size, codec):

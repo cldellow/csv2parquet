@@ -18,3 +18,9 @@ def test_write_from_tsv():
     assert schema.names == ['a', 'b']
     assert schema.column(0).logical_type == 'UTF8'
     assert schema.column(1).logical_type == 'UTF8'
+
+def test_sanitize_column_name():
+    assert csv2parquet.sanitize_column_name('foo') == 'foo'
+    assert csv2parquet.sanitize_column_name('foo bar') == 'foo_bar'
+    assert csv2parquet.sanitize_column_name('foo   bar') == 'foo_bar'
+    assert csv2parquet.sanitize_column_name('PostalCode') == 'postalcode'

@@ -13,6 +13,8 @@ def get_delimiter(csv_file):
 def sanitize_column_name(name):
     cleaned = re.sub('[^a-z0-9]', '_', name.lower())
     cleaned = re.sub('__*', '_', cleaned)
+    cleaned = re.sub('^_*', '', cleaned)
+    cleaned = re.sub('_*$', '', cleaned)
     return cleaned
 
 def get_column_names(csv_file):

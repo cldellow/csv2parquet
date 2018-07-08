@@ -36,6 +36,7 @@ def test_write_limit():
 
 def test_sanitize_column_name():
     assert csv2parquet.sanitize_column_name('foo') == 'foo'
+    assert csv2parquet.sanitize_column_name(' foo ') == 'foo'
     assert csv2parquet.sanitize_column_name('foo bar') == 'foo_bar'
     assert csv2parquet.sanitize_column_name('foo   bar') == 'foo_bar'
     assert csv2parquet.sanitize_column_name('PostalCode') == 'postalcode'

@@ -7,5 +7,8 @@ env:
     - PIPENV_IGNORE_VIRTUALENVS=1
 # command to install dependencies
 install: make setup
-# # command to run tests
+# command to run tests
 script: make test
+
+after_success:
+  - codecov

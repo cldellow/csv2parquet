@@ -11,6 +11,7 @@ pyarrow = "*"
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
+codecov = "*"
 
 
 [dev-packages]

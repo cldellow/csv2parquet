@@ -5,3 +5,4 @@ setup:
 test:
 	pipenv run -- pylint csv2parquet
 	pipenv run -- pytest --cov=csv2parquet
+	pipenv run -- codecov

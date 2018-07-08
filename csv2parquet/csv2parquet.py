@@ -52,7 +52,7 @@ def convert(csv_file, output_file, row_group_size, codec):
 
   pq.write_table(table, output, version='1.0', compression=codec, use_dictionary=True, row_group_size=row_group_size)
 
-if __name__ == '__main__':
+def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('csv_file', help="input file, can be CSV or TSV")
   parser.add_argument('-r', '--row-group-size', default=10000, type=int, help='The number of rows per row group.', nargs='?')

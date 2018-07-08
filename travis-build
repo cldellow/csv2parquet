@@ -1,6 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-pipenv install
-pipenv run pylint
-pipenv run pytest

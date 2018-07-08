@@ -1,6 +1,5 @@
-import pytest
-from . import csv2parquet
 import pyarrow.parquet as pq
+from . import csv2parquet
 
 def test_write_from_csv():
     csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple.csv'])
@@ -19,4 +18,3 @@ def test_write_from_tsv():
     assert schema.names == ['a', 'b']
     assert schema.column(0).logical_type == 'UTF8'
     assert schema.column(1).logical_type == 'UTF8'
-

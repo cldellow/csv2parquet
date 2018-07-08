@@ -28,3 +28,10 @@ csv2parquet file.csv [--row-group-size NNN] [--output output.parquet] [--codec C
 ```
 
 where `CODEC` is one of `snappy`, `gzip`, `brotli` or `none`
+
+## Testing
+
+```
+pylint csv2parquet
+pytest
+```

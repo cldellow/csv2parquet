@@ -1,6 +1,12 @@
 # Changes
 
+## 0.0.2
+
+Fix regression of `output_file`
+
 ## 0.0.1
+
+Initial pypi release.
 
 # How to do a release
 

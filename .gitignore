@@ -5,3 +5,5 @@ build/
 dist/
 csv2parquet.egg-info/
 .pytest_cache/
+.coverage
+csvs/*.parquet

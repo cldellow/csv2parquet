@@ -1,6 +1,7 @@
 # csv2parquet
 
 [![Build Status](https://travis-ci.org/cldellow/csv2parquet.svg?branch=master)](https://travis-ci.org/cldellow/csv2parquet)
+[![codecov](https://codecov.io/gh/cldellow/csv2parquet/branch/master/graph/badge.svg)](https://codecov.io/gh/cldellow/csv2parquet)
 
 Convert a CSV to a parquet file. You may also find [sqlite-parquet-vtable](https://github.com/cldellow/sqlite-parquet-vtable) useful.
 

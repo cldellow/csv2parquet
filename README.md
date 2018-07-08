@@ -24,7 +24,7 @@ pipenv install
 Next, create some Parquet files. The tool supports CSV and TSV files.
 
 ```
-csv2parquet file.csv [--row-group-size NNN] [--output output.parquet] [--codec CODEC]
+csv2parquet file.csv [--rows NNN] [--row-group-size NNN] [--output output.parquet] [--codec CODEC]
 ```
 
 where `CODEC` is one of `snappy`, `gzip`, `brotli` or `none`

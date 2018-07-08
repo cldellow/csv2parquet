@@ -24,7 +24,7 @@ def get_column_names(csv_file):
                 column_names.append(sanitize_column_name(col))
             return column_names
 
-def convert(csv_file, output_file, row_group_size, codec):
+def convert(csv_file, output_file, row_group_size, codec, max_rows):
     column_names = get_column_names(csv_file)
     columns = [[] for x in column_names]
     arrs = [[] for x in column_names]
@@ -49,6 +49,9 @@ def convert(csv_file, output_file, row_group_size, codec):
                 add_arrays(columns)
                 columns = [[] for x in range(len(column_names))]
 
+            if rownum == max_rows:
+                break
+
     if columns and columns[0]:
         add_arrays(columns)
 
@@ -66,6 +69,8 @@ def convert(csv_file, output_file, row_group_size, codec):
 def main_with_args(func, argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('csv_file', help="input file, can be CSV or TSV")
+    parser.add_argument('-R', '--rows', type=int,
+                        help='The number of rows to include, useful for testing.', nargs='?')
     parser.add_argument('-r', '--row-group-size', default=10000, type=int,
                         help='The number of rows per row group.', nargs='?')
     parser.add_argument('-o', '--output', help='The parquet file', nargs='?')
@@ -77,7 +82,7 @@ def main_with_args(func, argv):
         output = args.csv_file
         output = re.sub(r'\.tsv$|\.csv$', '', output)
         output = output + '.parquet'
-    func(args.csv_file, output, args.row_group_size, args.codec)
+    func(args.csv_file, output, args.row_group_size, args.codec, args.rows)
 
 def main():
     main_with_args(convert, sys.argv[1:])

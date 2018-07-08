@@ -1,0 +1,1 @@
+name = "csv2parquet"

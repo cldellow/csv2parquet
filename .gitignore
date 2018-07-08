@@ -1,1 +1,6 @@
 *.swp
+*.pyc
+
+build/
+dist/
+csv2parquet.egg-info/

@@ -1,4 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-pipenv run python csv2parquet.py "$@"

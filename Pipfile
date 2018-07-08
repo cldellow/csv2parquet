@@ -10,6 +10,7 @@ url = "https://pypi.python.org/simple"
 pyarrow = "*"
 pylint = "*"
 pytest = "*"
+pytest-cov = "*"
 
 
 [dev-packages]

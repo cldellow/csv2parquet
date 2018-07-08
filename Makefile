@@ -1,5 +1,5 @@
 setup:
-	pip install pipenv pytest-cov
+	pip install pipenv
 	pipenv install --dev --three
 
 test:

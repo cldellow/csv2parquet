@@ -1,5 +1,7 @@
 import argparse
 import csv
+import re
+import sys
 import pyarrow as pa
 import pyarrow.parquet as pq
 
@@ -56,7 +58,7 @@ def convert(csv_file, output_file, row_group_size, codec):
                    use_dictionary=True,
                    row_group_size=row_group_size)
 
-def main():
+def main_with_args(func, argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('csv_file', help="input file, can be CSV or TSV")
     parser.add_argument('-r', '--row-group-size', default=10000, type=int,
@@ -64,14 +66,13 @@ def main():
     parser.add_argument('-o', '--output', help='The parquet file', nargs='?')
     parser.add_argument('-c', '--codec', default='snappy',
                         help='The compression codec to use (brotli, gzip, snappy, none)', nargs='?')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     output = args.output
     if output is None:
         output = args.csv_file
-        if output.endswith('.csv'):
-            output = output[:-4]
-        elif output.endswith('.tsv'):
-            output = output[:-4]
+        output = re.sub(r'\.tsv$|\.csv$', '', output)
         output = output + '.parquet'
-    convert(args.csv_file, output, args.row_group_size, args.codec)
+    func(args.csv_file, output, args.row_group_size, args.codec)
 
+def main():
+    main_with_args(convert, sys.argv[1:])

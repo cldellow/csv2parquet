@@ -71,3 +71,17 @@ def test_argparse_bad_rename():
         csv2parquet.main_with_args(capture_args({}), ['csvs/simple.csv', '--rename', 'foo'])
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 2
+
+def test_argparse_bad_type():
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        csv2parquet.main_with_args(capture_args({}), ['csvs/simple.csv', '--type', 'foo'])
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 2
+
+def test_argparse_bad_type2():
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        csv2parquet.main_with_args(capture_args({}), ['csvs/simple.csv', '--type', 'foo=bar'])
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 2
+
+

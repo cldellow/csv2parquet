@@ -2,12 +2,14 @@ import pytest
 from . import csv2parquet
 
 def capture_args(_map):
-    def func(csv_file, output_file, row_group_size, codec, rows):
+    def func(csv_file, output_file, row_group_size, codec, rows, include, exclude):
         _map['csv_file'] = csv_file
         _map['output_file'] = output_file
         _map['row_group_size'] = row_group_size
         _map['codec'] = codec
         _map['rows'] = rows
+        _map['include'] = include
+        _map['exclude'] = exclude
 
     return func
 
@@ -24,6 +26,12 @@ def test_argparse_tsv():
     assert _map['output_file'] == 'foo.parquet'
     assert _map['rows'] is None
 
+def test_argparse_exclusive():
+    # Can't do both --include and --exclude
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        csv2parquet.main_with_args(capture_args({}), ['-i', 'foo', '-x', 'bar'])
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 2
 
 def test_argparse_override():
     """Can override the default values."""

@@ -1,5 +1,9 @@
 # Changes
 
+## 0.0.4
+
+Support `--include`, `--exclude`.
+
 ## 0.0.3
 
 Support `--rows`, sanitize column names

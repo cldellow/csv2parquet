@@ -11,6 +11,13 @@ def test_write_from_csv():
     assert schema.column(1).logical_type == 'UTF8'
     row_group = pqf.read_row_group(0)
     assert row_group.num_rows == 3
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 3
+    col_a = row_group.column(0).to_pylist()
+    assert col_a == ['1', '2', '3']
+    col_b = row_group.column(1).to_pylist()
+    assert col_b == ['a', 'b', 'c']
+
 
 def test_write_from_tsv():
     csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple2.tsv'])
@@ -22,6 +29,10 @@ def test_write_from_tsv():
     assert schema.column(1).logical_type == 'UTF8'
     row_group = pqf.read_row_group(0)
     assert row_group.num_rows == 1
+    col_a = row_group.column(0).to_pylist()
+    assert col_a == ['1']
+    col_b = row_group.column(1).to_pylist()
+    assert col_b == ['b']
 
 def test_write_row_group_size():
     csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple.csv', '--row-group-size', '1'])
@@ -33,6 +44,49 @@ def test_write_limit():
     pqf = pq.ParquetFile('csvs/simple.parquet')
     row_group = pqf.read_row_group(0)
     assert row_group.num_rows == 1
+
+def test_write_include_by_name():
+    csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple.csv', '--include', 'a'])
+    pqf = pq.ParquetFile('csvs/simple.parquet')
+    schema = pqf.schema
+    assert schema.names == ['a']
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 3
+    col_a = row_group.column(0).to_pylist()
+    assert col_a == ['1', '2', '3']
+
+def test_write_include_by_index():
+    csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple.csv', '--include', '0'])
+    pqf = pq.ParquetFile('csvs/simple.parquet')
+    schema = pqf.schema
+    assert schema.names == ['a']
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 3
+    col_a = row_group.column(0).to_pylist()
+    assert col_a == ['1', '2', '3']
+
+def test_write_exclude_by_name():
+    csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple.csv', '--exclude', 'a'])
+    pqf = pq.ParquetFile('csvs/simple.parquet')
+    schema = pqf.schema
+    assert schema.names == ['b']
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 3
+    col_b = row_group.column(0).to_pylist()
+    assert col_b == ['a', 'b', 'c']
+
+def test_write_exclude_by_index():
+    csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple.csv', '--exclude', '0'])
+    pqf = pq.ParquetFile('csvs/simple.parquet')
+    schema = pqf.schema
+    assert schema.names == ['b']
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 3
+    col_b = row_group.column(0).to_pylist()
+    assert col_b == ['a', 'b', 'c']
+
+
+
 
 def test_sanitize_column_name():
     assert csv2parquet.sanitize_column_name('foo') == 'foo'

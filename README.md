@@ -49,6 +49,7 @@ optional arguments:
   -R RENAME [RENAME ...], --rename RENAME [RENAME ...]
                         Rename a column. Specify the column to be renamed and
                         its new name, eg: 0=age or person_age=age```
+```
 
 ## Testing
 

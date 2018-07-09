@@ -1,8 +1,10 @@
 import pytest
+import pyarrow as pa
 from . import csv2parquet
 
 def capture_args(_map):
-    def func(csv_file, output_file, row_group_size, codec, rows, rename, include, exclude):
+    def func(csv_file, output_file, row_group_size, codec, rows,
+             rename, include, exclude, raw_types):
         _map['csv_file'] = csv_file
         _map['output_file'] = output_file
         _map['row_group_size'] = row_group_size
@@ -11,6 +13,7 @@ def capture_args(_map):
         _map['rename'] = rename
         _map['include'] = include
         _map['exclude'] = exclude
+        _map['raw_types'] = raw_types
 
     return func
 
@@ -26,6 +29,12 @@ def test_argparse_tsv():
     assert _map['csv_file'] == 'foo.tsv'
     assert _map['output_file'] == 'foo.parquet'
     assert _map['rows'] is None
+    assert _map['raw_types'] == []
+
+def test_argparse_types():
+    _map = {}
+    csv2parquet.main_with_args(capture_args(_map), ['foo.csv', '--type', '0=string', '0=int8?'])
+    assert _map['raw_types'] == [('0', pa.string(), False), ('0', pa.int8(), True)]
 
 def test_argparse_override():
     """Can override the default values."""

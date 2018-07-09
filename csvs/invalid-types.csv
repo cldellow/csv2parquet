@@ -1,0 +1,3 @@
+bool,float32,float64,int8,int16,int32,int64,string,timestamp
+1,0.5,0.75,12,400,132000,6000000000,string,2018-07-09
+blah,blah,blah,blah,blah,blah,blah,blah,blah

@@ -1,4 +1,6 @@
+from datetime import datetime
 import pyarrow.parquet as pq
+import pytest
 from . import csv2parquet
 
 def test_write_from_csv():
@@ -98,3 +100,95 @@ def test_sanitize_column_name():
     assert csv2parquet.sanitize_column_name('foo bar') == 'foo_bar'
     assert csv2parquet.sanitize_column_name('foo   bar') == 'foo_bar'
     assert csv2parquet.sanitize_column_name('PostalCode') == 'postalcode'
+
+def test_required_types():
+    csv2parquet.main_with_args(csv2parquet.convert,
+                               ['csvs/types.csv', '--type',
+                                'bool=bool', 'float32=float32', 'float64=float64', 'int8=int8',
+                                'int16=int16', 'int32=int32', 'int64=int64', 'string=string',
+                                'timestamp=timestamp'])
+    pqf = pq.ParquetFile('csvs/types.parquet')
+    schema = pqf.schema
+    assert schema.names == ['bool', 'float32', 'float64', 'int8', 'int16', 'int32', 'int64',
+                            'string', 'timestamp']
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 2
+    bools = row_group.column(0).to_pylist()
+    assert bools == [True, False]
+    float32 = row_group.column(1).to_pylist()
+    assert float32 == pytest.approx([0.5, 0.6])
+    float64 = row_group.column(2).to_pylist()
+    assert float64 == [0.75, 1.75]
+    int8 = row_group.column(3).to_pylist()
+    assert int8 == [12, 13]
+    int16 = row_group.column(4).to_pylist()
+    assert int16 == [400, 401]
+    int32 = row_group.column(5).to_pylist()
+    assert int32 == [132000, 132001]
+    int64 = row_group.column(6).to_pylist()
+    assert int64 == [6000000000, 6000000001]
+    string = row_group.column(7).to_pylist()
+    assert string == ['string', 'string']
+    timestamp = row_group.column(8).to_pylist()
+    assert timestamp == [datetime(2018, 7, 9, 0, 0), datetime(2018, 7, 10, 0, 0)]
+
+def test_required_invalid_types():
+    with pytest.raises(ValueError):
+        csv2parquet.main_with_args(csv2parquet.convert,
+                                   ['csvs/invalid-types.csv', '--type',
+                                    'bool=bool', 'float32=float32', 'float64=float64', 'int8=int8',
+                                    'int16=int16', 'int32=int32', 'int64=int64', 'string=string',
+                                    'timestamp=timestamp'])
+
+def test_opt_invalid_types():
+    csv2parquet.main_with_args(csv2parquet.convert,
+                               ['csvs/invalid-types.csv', '--type',
+                                'bool=bool?', 'float32=float32?', 'float64=float64?', 'int8=int8?',
+                                'int16=int16?', 'int32=int32?', 'int64=int64?', 'string=string?',
+                                'timestamp=timestamp?'])
+    pqf = pq.ParquetFile('csvs/invalid-types.parquet')
+    schema = pqf.schema
+    assert schema.names == ['bool', 'float32', 'float64', 'int8', 'int16', 'int32', 'int64',
+                            'string', 'timestamp']
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 2
+    bools = row_group.column(0).to_pylist()
+    assert bools == [True, None]
+    float32 = row_group.column(1).to_pylist()
+    assert float32 == pytest.approx([0.5, None])
+    float64 = row_group.column(2).to_pylist()
+    assert float64 == [0.75, None]
+    int8 = row_group.column(3).to_pylist()
+    assert int8 == [12, None]
+    int16 = row_group.column(4).to_pylist()
+    assert int16 == [400, None]
+    int32 = row_group.column(5).to_pylist()
+    assert int32 == [132000, None]
+    int64 = row_group.column(6).to_pylist()
+    assert int64 == [6000000000, None]
+    string = row_group.column(7).to_pylist()
+    assert string == ['string', 'blah']
+    timestamp = row_group.column(8).to_pylist()
+    assert timestamp == [datetime(2018, 7, 9, 0, 0), None]
+
+def test_required_invalid_ints():
+    with pytest.raises(ValueError):
+        csv2parquet.main_with_args(csv2parquet.convert,
+                                   ['csvs/ints.csv', '--type',
+                                    'int8=int8', 'int16=int16', 'int32=int32'])
+
+def test_opt_invalid_ints():
+    csv2parquet.main_with_args(csv2parquet.convert,
+                               ['csvs/ints.csv', '--type',
+                                'int8=int8?', 'int16=int16?', 'int32=int32?'])
+    pqf = pq.ParquetFile('csvs/ints.parquet')
+    schema = pqf.schema
+    assert schema.names == ['int8', 'int16', 'int32']
+    row_group = pqf.read_row_group(0)
+    assert row_group.num_rows == 2
+    int8 = row_group.column(0).to_pylist()
+    assert int8 == [1, None]
+    int16 = row_group.column(1).to_pylist()
+    assert int16 == [2, None]
+    int32 = row_group.column(2).to_pylist()
+    assert int32 == [3, None]

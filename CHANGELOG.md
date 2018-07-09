@@ -1,5 +1,9 @@
 # Changes
 
+## 0.0.5
+
+Support `--type`.
+
 ## 0.0.4
 
 Support `--include`, `--exclude`, `--rename`.

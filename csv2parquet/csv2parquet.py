@@ -229,7 +229,6 @@ def main_with_args(func, argv):
 
 
         args.type[i] = (haystack[:needle], column_type, opt)
-        print(args.type)
 
     args.rows = args.rows[0] if args.rows else None
     args.row_group_size = args.row_group_size[0]

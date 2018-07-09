@@ -26,7 +26,7 @@ Next, create some Parquet files. The tool supports CSV and TSV files.
 ```
 usage: csv2parquet [-h] [-n ROWS] [-r ROW_GROUP_SIZE] [-o OUTPUT] [-c CODEC]
                    [-i INCLUDE [INCLUDE ...] | -x EXCLUDE [EXCLUDE ...]]
-                   [-R RENAME [RENAME ...]]
+                   [-R RENAME [RENAME ...]] [-t TYPE [TYPE ...]]
                    csv_file
 
 positional arguments:
@@ -49,6 +49,12 @@ optional arguments:
   -R RENAME [RENAME ...], --rename RENAME [RENAME ...]
                         Rename a column. Specify the column to be renamed and
                         its new name, eg: 0=age or person_age=age
+  -t TYPE [TYPE ...], --type TYPE [TYPE ...]
+                        Parse a column as a given type. Specify the column and
+                        its type, eg: 0=bool? or person_age=int8. Parse errors
+                        are fatal unless the type is followed by a question
+                        mark. Valid types are string (default), bool, int8,
+                        int16, int32, int64, float32, float64, timestamp
 ```
 
 ## Testing

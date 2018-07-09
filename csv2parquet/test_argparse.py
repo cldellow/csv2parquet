@@ -83,5 +83,3 @@ def test_argparse_bad_type2():
         csv2parquet.main_with_args(capture_args({}), ['csvs/simple.csv', '--type', 'foo=bar'])
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 2
-
-

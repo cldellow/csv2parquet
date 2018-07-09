@@ -213,8 +213,8 @@ def main_with_args(func, argv):
         haystack = args.type[i]
         needle = haystack.find('=')
         if needle == -1:
-            print(haystack + ' is not a valid option for --type, it must have the form colspec=type,')
-            print('where colspec is a numeric index or the original name.')
+            print(haystack + ' is not a valid option for --type, it must have the form')
+            print('colspec=type, where colspec is a numeric index or the original name.')
             sys.exit(2)
 
         opt = haystack[-1] == '?'
@@ -224,7 +224,8 @@ def main_with_args(func, argv):
         column_type_raw = haystack[needle + 1:]
         column_type = get_pyarrow_types().get(column_type_raw, None)
         if column_type is None:
-            print(haystack + ' is not a valid option for --type. ' + column_type_raw + ' is unknown.')
+            print(haystack + ' is not a valid option for --type. ' +
+                  column_type_raw + ' is unknown.')
             sys.exit(2)
 
 

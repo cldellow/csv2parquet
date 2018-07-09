@@ -2,7 +2,7 @@ import argparse
 import csv
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 import pyarrow as pa
 import pyarrow.parquet as pq
 
@@ -130,8 +130,7 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
                         comps = value.split('-')
                         if len(comps) != 3:
                             raise ValueError()
-                        value = datetime(int(comps[0]), int(comps[1]), int(comps[2]),
-                                         tzinfo=timezone.utc)
+                        value = datetime(int(comps[0]), int(comps[1]), int(comps[2]))
                 except ValueError:
                     if types[idx][1]:
                         dropped_values[idx] += 1

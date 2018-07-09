@@ -2,7 +2,7 @@
 
 ## 0.0.4
 
-Support `--include`, `--exclude`.
+Support `--include`, `--exclude`, `--rename`.
 
 ## 0.0.3
 

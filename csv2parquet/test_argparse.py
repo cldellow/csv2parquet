@@ -2,12 +2,13 @@ import pytest
 from . import csv2parquet
 
 def capture_args(_map):
-    def func(csv_file, output_file, row_group_size, codec, rows, include, exclude):
+    def func(csv_file, output_file, row_group_size, codec, rows, rename, include, exclude):
         _map['csv_file'] = csv_file
         _map['output_file'] = output_file
         _map['row_group_size'] = row_group_size
         _map['codec'] = codec
         _map['rows'] = rows
+        _map['rename'] = rename
         _map['include'] = include
         _map['exclude'] = exclude
 
@@ -26,27 +27,38 @@ def test_argparse_tsv():
     assert _map['output_file'] == 'foo.parquet'
     assert _map['rows'] is None
 
-def test_argparse_exclusive():
-    # Can't do both --include and --exclude
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
-        csv2parquet.main_with_args(capture_args({}), ['-i', 'foo', '-x', 'bar'])
-    assert pytest_wrapped_e.type == SystemExit
-    assert pytest_wrapped_e.value.code == 2
-
 def test_argparse_override():
     """Can override the default values."""
     _map = {}
     csv2parquet.main_with_args(
         capture_args(_map),
-        ['foo.csv', '-o', 'output', '-c', 'somecodec', '-r', '123', '-R', '234'])
+        ['foo.csv', '-o', 'output', '-c', 'somecodec', '-r', '123', '-n', '234'])
     assert _map['row_group_size'] == 123
     assert _map['codec'] == 'somecodec'
     assert _map['output_file'] == 'output'
     assert _map['rows'] == 234
 
-def test_argparse_bad():
+def test_argparse_rename():
+    _map = {}
+    csv2parquet.main_with_args(capture_args(_map), ['foo.csv', '--rename', '0=foo', 'bar=baz'])
+    assert _map['rename'] == [('0', 'foo'), ('bar', 'baz')]
+
+def test_argparse_bad_no_args():
     """No args should be an error."""
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         csv2parquet.main_with_args(None, [])
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 2
+
+def test_argparse_bad_inc_and_exc():
+    # Can't do both --include and --exclude
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        csv2parquet.main_with_args(capture_args({}), ['csvs/simple.csv', '-i', 'foo', '-x', 'bar'])
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 2
+
+def test_argparse_bad_rename():
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        csv2parquet.main_with_args(capture_args({}), ['csvs/simple.csv', '--rename', 'foo'])
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 2

@@ -7,7 +7,7 @@ Convert a CSV to a parquet file. You may also find [sqlite-parquet-vtable](https
 
 ## Installing
 
-If you just want to use the tool, install it and its dependencies via pip:
+If you just want to use the tool:
 
 ```
 sudo pip install pyarrow csv2parquet
@@ -24,10 +24,31 @@ pipenv install
 Next, create some Parquet files. The tool supports CSV and TSV files.
 
 ```
-csv2parquet file.csv [--rows NNN] [--row-group-size NNN] [--output output.parquet] [--codec CODEC]
-```
+usage: csv2parquet [-h] [-n ROWS] [-r ROW_GROUP_SIZE] [-o OUTPUT] [-c CODEC]
+                   [-i INCLUDE [INCLUDE ...] | -x EXCLUDE [EXCLUDE ...]]
+                   [-R RENAME [RENAME ...]]
+                   csv_file
 
-where `CODEC` is one of `snappy`, `gzip`, `brotli` or `none`
+positional arguments:
+  csv_file              input file, can be CSV or TSV
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n ROWS, --rows ROWS  The number of rows to include, useful for testing.
+  -r ROW_GROUP_SIZE, --row-group-size ROW_GROUP_SIZE
+                        The number of rows per row group.
+  -o OUTPUT, --output OUTPUT
+                        The parquet file
+  -c CODEC, --codec CODEC
+                        The compression codec to use (brotli, gzip, snappy,
+                        none)
+  -i INCLUDE [INCLUDE ...], --include INCLUDE [INCLUDE ...]
+                        Include the given columns (by index or name)
+  -x EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
+                        Exclude the given columns (by index or name)
+  -R RENAME [RENAME ...], --rename RENAME [RENAME ...]
+                        Rename a column. Specify the column to be renamed and
+                        its new name, eg: 0=age or person_age=age```
 
 ## Testing
 

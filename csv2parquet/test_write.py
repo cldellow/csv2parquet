@@ -34,6 +34,13 @@ def test_write_from_tsv():
     col_b = row_group.column(1).to_pylist()
     assert col_b == ['b']
 
+def test_write_rename():
+    csv2parquet.main_with_args(csv2parquet.convert,
+                               ['csvs/simple.csv', '--rename', '0=alpha', 'b=bee'])
+    pqf = pq.ParquetFile('csvs/simple.parquet')
+    schema = pqf.schema
+    assert schema.names == ['alpha', 'bee']
+
 def test_write_row_group_size():
     csv2parquet.main_with_args(csv2parquet.convert, ['csvs/simple.csv', '--row-group-size', '1'])
     pqf = pq.ParquetFile('csvs/simple.parquet')
@@ -84,9 +91,6 @@ def test_write_exclude_by_index():
     assert row_group.num_rows == 3
     col_b = row_group.column(0).to_pylist()
     assert col_b == ['a', 'b', 'c']
-
-
-
 
 def test_sanitize_column_name():
     assert csv2parquet.sanitize_column_name('foo') == 'foo'

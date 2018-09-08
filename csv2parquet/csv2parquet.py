@@ -103,13 +103,13 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
                     if expected_type == PA_STRING:
                         pass
                     elif expected_type == PA_BOOL:
-                        if value == '0' or value == 'N' or value == 'F':
+                        if value in ('0', 'N', 'F'):
                             value = False
-                        elif value == '1' or value == 'Y' or value == 'T':
+                        elif value in ('1', 'Y', 'T'):
                             value = True
                         else:
                             raise ValueError()
-                    elif expected_type == PA_FLOAT32 or expected_type == PA_FLOAT64:
+                    elif expected_type in (PA_FLOAT32, PA_FLOAT64):
                         value = float(value)
                     elif expected_type == PA_INT8:
                         value = int(value)
@@ -173,7 +173,7 @@ def main_with_args(func, argv):
                         help='The number of rows per row group.', nargs=1)
     parser.add_argument('-o', '--output', help='The parquet file', nargs=1)
     parser.add_argument('-c', '--codec', default=['snappy'],
-                        help='The compression codec to use (brotli, gzip, snappy, none)', nargs=1)
+                        help='The compression codec to use (brotli, gzip, snappy, zstd, none)', nargs=1)
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-i', '--include', default=[],
                        help='Include the given columns (by index or name)', nargs='+')

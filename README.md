@@ -41,7 +41,7 @@ optional arguments:
                         The parquet file
   -c CODEC, --codec CODEC
                         The compression codec to use (brotli, gzip, snappy,
-                        none)
+                        zstd, none)
   -i INCLUDE [INCLUDE ...], --include INCLUDE [INCLUDE ...]
                         Include the given columns (by index or name)
   -x EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]

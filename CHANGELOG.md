@@ -1,5 +1,9 @@
 # Changes
 
+## 0.0.6
+
+Upgrade to pyarrow 0.10.0, which supports zstd.
+
 ## 0.0.5
 
 Support `--type`.

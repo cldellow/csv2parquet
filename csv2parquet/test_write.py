@@ -155,7 +155,9 @@ def test_opt_invalid_types():
     bools = row_group.column(0).to_pylist()
     assert bools == [True, None]
     float32 = row_group.column(1).to_pylist()
-    assert float32 == pytest.approx([0.5, None])
+    assert len(float32) == 2
+    assert float32[0] == pytest.approx(0.5)
+    assert float32[1] is None
     float64 = row_group.column(2).to_pylist()
     assert float64 == [0.75, None]
     int8 = row_group.column(3).to_pylist()

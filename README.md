@@ -54,8 +54,8 @@ optional arguments:
                         Parse a column as a given type. Specify the column and
                         its type, eg: 0=bool? or person_age=int8. Parse errors
                         are fatal unless the type is followed by a question
-                        mark. Valid types are string (default), bool, int8,
-                        int16, int32, int64, float32, float64, timestamp
+                        mark. Valid types are string (default), base64, bool,
+                        float32, float64, int8, int16, int32, int64, timestamp
 ```
 
 ## Testing

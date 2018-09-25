@@ -3,6 +3,7 @@ import csv
 import re
 import sys
 from datetime import datetime
+from base64 import standard_b64decode
 import pyarrow as pa
 import pyarrow.parquet as pq
 
@@ -15,6 +16,7 @@ PA_INT32 = pa.int32()
 PA_INT64 = pa.int64()
 PA_STRING = pa.string()
 PA_TIMESTAMP = pa.timestamp('ns')
+PA_BINARY = pa.binary()
 
 def get_delimiter(csv_file):
     if csv_file[-4:] == '.tsv':
@@ -51,7 +53,8 @@ def get_pyarrow_types():
         'int32': PA_INT32,
         'int64': PA_INT64,
         'string': PA_STRING,
-        'timestamp': PA_TIMESTAMP
+        'timestamp': PA_TIMESTAMP,
+        'base64': PA_BINARY
     }
 
 # pylint: disable=too-many-branches,too-many-statements
@@ -131,6 +134,9 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
                         if len(comps) != 3:
                             raise ValueError()
                         value = datetime(int(comps[0]), int(comps[1]), int(comps[2]))
+                    elif expected_type == PA_BINARY:
+                        value = standard_b64decode(value)
+
                 except ValueError:
                     if types[idx][1]:
                         dropped_values[idx] += 1
@@ -186,8 +192,8 @@ def main_with_args(func, argv):
     parser.add_argument('-t', '--type', default=[], nargs='+',
                         help='Parse a column as a given type. Specify the column and its type,' +
                         ' eg: 0=bool? or person_age=int8. Parse errors are fatal unless the type' +
-                        ' is followed by a question mark. Valid types are string (default), bool,' +
-                        ' int8, int16, int32, int64, float32, float64, timestamp')
+                        ' is followed by a question mark. Valid types are string (default), base64, bool,' +
+                        ' float32, float64, int8, int16, int32, int64, timestamp')
 
     args = parser.parse_args(argv)
     output = args.output

@@ -9,8 +9,8 @@ def test_write_from_csv():
     assert pqf.num_row_groups == 1
     schema = pqf.schema
     assert schema.names == ['a', 'b']
-    assert schema.column(0).logical_type == 'UTF8'
-    assert schema.column(1).logical_type == 'UTF8'
+    assert schema.column(0).logical_type.type == 'STRING'
+    assert schema.column(1).logical_type.type == 'STRING'
     row_group = pqf.read_row_group(0)
     assert row_group.num_rows == 3
     row_group = pqf.read_row_group(0)
@@ -27,8 +27,8 @@ def test_write_from_tsv():
     assert pqf.num_row_groups == 1
     schema = pqf.schema
     assert schema.names == ['a', 'b']
-    assert schema.column(0).logical_type == 'UTF8'
-    assert schema.column(1).logical_type == 'UTF8'
+    assert schema.column(0).logical_type.type == 'STRING'
+    assert schema.column(1).logical_type.type == 'STRING'
     row_group = pqf.read_row_group(0)
     assert row_group.num_rows == 1
     col_a = row_group.column(0).to_pylist()

@@ -106,9 +106,9 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
                     if expected_type == PA_STRING:
                         pass
                     elif expected_type == PA_BOOL:
-                        if value in ('0', 'N', 'F'):
+                        if value in ('0', 'N', 'F', 'false'):
                             value = False
-                        elif value in ('1', 'Y', 'T'):
+                        elif value in ('1', 'Y', 'T', 'true'):
                             value = True
                         else:
                             raise ValueError()
@@ -157,11 +157,12 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
     if columns and any(columns):
         add_arrays(columns)
 
-    fields = [pa.chunked_array(arr, type=types[idx][0]) if keep[idx] else None
-              for idx, arr in enumerate(arrs)]
-    columns = [pa.Column.from_array(column_names[x], fields[x])
-               for x in range(len(fields)) if keep[x]]
-    table = pa.Table.from_arrays(columns)
+    data = [
+        pa.array([item.as_py() for sublist in arr for item in sublist], type=types[idx][0]) if keep[idx] else None
+        for idx, arr in enumerate(arrs)]
+    data = [x for x in data if x is not None]
+    batch = pa.RecordBatch.from_arrays(data, [column_names[x] for x in range(len(arrs)) if keep[x]])
+    table = pa.Table.from_batches([batch])
 
     pq.write_table(table,
                    output_file,

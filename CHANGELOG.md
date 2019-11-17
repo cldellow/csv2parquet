@@ -1,5 +1,9 @@
 # Changes
 
+## 0.0.8
+
+Upgrade to be compatible with Arrow 0.15.1, which removed the `Column` type.
+
 ## 0.0.7
 
 Add `base64` type to interpret a base64-encoded string and store it as a binary field.

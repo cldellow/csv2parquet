@@ -99,9 +99,10 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
             idx = -1
             for value in row:
                 idx += 1
-                if not keep[idx]:
-                    continue
                 try:
+                    if not keep[idx]:
+                        continue
+
                     expected_type = types[idx][0]
                     if expected_type == PA_STRING:
                         pass
@@ -146,6 +147,9 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
                     else:
                         raise ValueError('unexpected value for column {}, type {}: {}'
                                          .format(column_names[idx], expected_type, str(value)))
+                except IndexError:
+                    raise IndexError('Too many columns {} for row {}'.format(idx, rownum))
+
                 columns[idx].append(value)
             if rownum % 10000 == 0:
                 add_arrays(columns)

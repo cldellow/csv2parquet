@@ -140,6 +140,11 @@ def test_required_invalid_types():
                                     'int16=int16', 'int32=int32', 'int64=int64', 'string=string',
                                     'timestamp=timestamp'])
 
+def test_too_many_columns():
+    with pytest.raises(IndexError):
+        csv2parquet.main_with_args(csv2parquet.convert,
+                                   ['csvs/too-many-columns.csv'])
+
 def test_opt_invalid_types():
     csv2parquet.main_with_args(csv2parquet.convert,
                                ['csvs/invalid-types.csv', '--type',

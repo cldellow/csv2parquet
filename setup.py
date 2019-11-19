@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="csv2parquet",
-    version="0.0.8",
+    version="0.0.9",
     author="Colin Dellow",
     author_email="cldellow@cldellow.com",
     description="A tool to convert CSVs to Parquet files",

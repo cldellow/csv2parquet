@@ -1,5 +1,10 @@
 # Changes
 
+## 0.0.9
+
+Better error message when a row in the CSV has too many columns in it,
+courtesy [dazzag24](https://github.com/cldellow/csv2parquet/pull/14)
+
 ## 0.0.8
 
 Upgrade to be compatible with Arrow 0.15.1, which removed the `Column` type.

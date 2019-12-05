@@ -145,8 +145,8 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
                             dropped_value_examples[idx].append(str(value))
                         value = None
                     else:
-                        raise ValueError('unexpected value for column {}, type {}: {}'
-                                         .format(column_names[idx], expected_type, str(value)))
+                        raise ValueError('unexpected value for column {}, type {}: {} on row {}'
+                                         .format(column_names[idx], expected_type, str(value), rownum))
                 except IndexError:
                     raise IndexError('Too many columns {} for row {}'.format(idx, rownum))
 

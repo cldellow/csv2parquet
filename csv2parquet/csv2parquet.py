@@ -114,7 +114,10 @@ def convert(csv_file, output_file, row_group_size, codec, max_rows,
                         else:
                             raise ValueError()
                     elif expected_type in (PA_FLOAT32, PA_FLOAT64):
-                        value = float(value)
+                        if "".__eq__(value):
+                            value = float('nan')      
+                        else:
+                            value = float(value)
                     elif expected_type == PA_INT8:
                         value = int(value)
                         if value < -128 or value > 127:
